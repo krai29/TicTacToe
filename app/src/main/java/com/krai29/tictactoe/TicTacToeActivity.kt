@@ -1,5 +1,8 @@
 package com.krai29.tictactoe
 
+import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -20,6 +23,12 @@ class TicTacToeActivity : AppCompatActivity(),View.OnClickListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        when (currentNightMode) {
+            Configuration.UI_MODE_NIGHT_NO -> {}
+            Configuration.UI_MODE_NIGHT_YES -> {
+                supportActionBar!!.setBackgroundDrawable(ColorDrawable(Color.parseColor("#9a0007")))}
+        }
         initArray()
         for (i in board){
             for (button in i){
