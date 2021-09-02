@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">TicTacToe</string>
+    <string name="reset">Reset</string>
+    <string name="player_x_won_message">Player X won</string>
+    <string name="player_o_won">Player O won</string>
+    <string name="player_x_turn">Player X turn</string>
+    <string name="player_o_turn">Player O turn</string>
+    <string name="draw_message">Game Drawn. Play again!!</string>
 </resources>

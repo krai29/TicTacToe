@@ -1,18 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:orientation="vertical"
+    android:padding="@dimen/dimen_twenty_padding"
+    tools:context=".TicTacToeActivity">
 
     <TextView
+        android:id="@+id/displayTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/dimen_sixteen_margin"
+        android:text="@string/player_x_turn"
+        android:textSize="@dimen/dimen_twenty_four_text"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button1"
+            style="@style/Theme.TicTacToe.Button"
+            android:layout_weight="1"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button2"
+            style="@style/Theme.TicTacToe.Button"
+            android:layout_weight="1"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button3"
+            style="@style/Theme.TicTacToe.Button"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button4"
+            style="@style/Theme.TicTacToe.Button"
+            android:layout_weight="1"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button5"
+            style="@style/Theme.TicTacToe.Button"
+            android:layout_weight="1"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button6"
+            style="@style/Theme.TicTacToe.Button"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button7"
+            style="@style/Theme.TicTacToe.Button"
+            android:layout_weight="1"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button8"
+            style="@style/Theme.TicTacToe.Button"
+            android:layout_weight="1"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button9"
+            style="@style/Theme.TicTacToe.Button"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/resetBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_sixteen_margin"
+        android:layout_marginBottom="@dimen/dimen_sixteen_margin"
+        android:text="@string/reset"
+        android:textSize="@dimen/dimen_twenty_four_text"
+        android:layout_gravity="center_horizontal"/>
+</LinearLayout>

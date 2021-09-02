@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="dimen_zero_margin">0dp</dimen>
+    <dimen name="dimen_one_margin">1dp</dimen>
+    <dimen name="dimen_twenty_padding">20dp</dimen>
+    <dimen name="dimen_sixteen_margin">16dp</dimen>
+    <dimen name="dimen_twenty_four_text">24sp</dimen>
+    <dimen name="dimen_thirty_six_text">36sp</dimen>
+</resources>
