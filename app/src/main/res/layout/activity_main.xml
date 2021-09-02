@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="@dimen/dimen_twenty_padding"
+    android:padding="@dimen/dimen_twenty_padding"
     tools:context=".TicTacToeActivity">
 
     <TextView
@@ -84,17 +84,13 @@
 
     </LinearLayout>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/resetBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_orange_light"
         android:layout_marginTop="@dimen/dimen_sixteen_margin"
         android:layout_marginBottom="@dimen/dimen_sixteen_margin"
-        android:padding="@dimen/dimen_twenty_padding"
         android:text="@string/reset"
         android:textSize="@dimen/dimen_twenty_four_text"
         android:layout_gravity="center_horizontal"/>
-
-
 </LinearLayout>
