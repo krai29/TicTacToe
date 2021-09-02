@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.TicTacToe.Button" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:layout_width">@dimen/dimen_zero_margin</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textSize">@dimen/dimen_thirty_six_text</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:layout_margin">@dimen/dimen_one_margin</item>
+        <item name="android:insetBottom">@dimen/dimen_zero_margin</item>
+        <item name="android:insetTop">@dimen/dimen_zero_margin</item>
+    </style>
+
+</resources>
