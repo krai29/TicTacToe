@@ -29,7 +29,10 @@ android {
         }
         release {
             minifyEnabled true
+            applicationIdSuffix '.release'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            debuggable false
+            signingConfig signingConfigs.release
         }
     }
 
