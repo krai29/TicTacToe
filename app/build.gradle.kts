@@ -11,7 +11,7 @@ plugins {
 
 android {
     namespace = "com.krai29.tictactoe"
-    compileSdk = 36 // Assuming targetSdk, will verify from error if needed
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.krai29.tictactoe"
@@ -29,10 +29,6 @@ android {
     buildFeatures {
         compose = true
     }
-
-//    composeOptions {
-//        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
-//    }
 
     buildTypes {
         getByName("debug") {
