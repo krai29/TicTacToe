@@ -19,14 +19,11 @@ This project is a simple yet fully functional Tic Tac Toe game. It allows two pl
 
 ## Screenshots
 
-*(You can add screenshots of your app here. For example:)*
-<!--
 <p align="center">
   <img src="screenshots/screenshot_light.png" width="200" alt="Light Theme Screenshot">
   &nbsp; &nbsp; &nbsp;
   <img src="screenshots/screenshot_dark.png" width="200" alt="Dark Theme Screenshot">
 </p>
--->
 
 ## Tech Stack
 
