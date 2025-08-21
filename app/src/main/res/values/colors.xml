@@ -10,4 +10,19 @@
     <color name="dark_red">#9a0007</color>
     <color name="medium_red">#d32f2f</color>
     <color name="light_red">#ff6659</color>
+
+    <!-- Board and Cell Colors -->
+    <color name="board_area_background_dark">#121212</color>
+    <color name="cell_unclicked_background_dark">#333333</color>
+    <color name="cell_clicked_background_dark">#757575</color>
+    <color name="grid_line_color_dark">#555555</color>
+    <color name="player_x_color_dark">#FF8A80</color> <!-- Light Red -->
+    <color name="player_o_color_dark">#80D8FF</color> <!-- Light Blue -->
+
+    <color name="board_area_background_light">#F0F0F0</color>
+    <color name="cell_unclicked_background_light">#FFFFFF</color>
+    <color name="cell_clicked_background_light">#D0D0D0</color>
+    <color name="grid_line_color_light">#BDBDBD</color>
+    <color name="player_x_color_light">#D32F2F</color> <!-- Medium Red -->
+    <color name="player_o_color_light">#1976D2</color> <!-- Medium Blue -->
 </resources>

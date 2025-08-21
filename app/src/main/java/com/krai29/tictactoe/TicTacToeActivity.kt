@@ -1,182 +1,195 @@
 package com.krai29.tictactoe
 
-import android.content.res.Configuration
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.button.MaterialButton
-import com.krai29.tictactoe.databinding.ActivityMainBinding
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
-class TicTacToeActivity : AppCompatActivity(),View.OnClickListener {
-
-    private var player = true
-    private var turnCount = 0
-    private var boardStatus = Array(3){IntArray(3)}
-
-    private lateinit var board : Array<Array<MaterialButton>>
-    private lateinit var binding: ActivityMainBinding
-
+class TicTacToeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-            Configuration.UI_MODE_NIGHT_NO -> {}
-            Configuration.UI_MODE_NIGHT_YES -> {
-                supportActionBar!!.setBackgroundDrawable(ColorDrawable(Color.parseColor("#9a0007")))}
-        }
-        initArray()
-        for (i in board){
-            for (button in i){
-                button.setOnClickListener(this)
-            }
-        }
-
-        initializeBoardStatus()
-
-        binding.resetBtn.setOnClickListener {
-            player = true
-            turnCount = 0
-            initializeBoardStatus()
-            updateDisplay("Player X turn")
-        }
-    }
-
-    private fun initializeBoardStatus() {
-        for (i in 0..2){
-            for (j in 0..2){
-                boardStatus[i][j] = -1
-                board[i][j].isEnabled = true
-                board[i][j].text = ""
+        setContent {
+            TicTacToeAppTheme {
+                Surface(modifier = Modifier.fillMaxSize()) { // Ensure theme background is applied
+                    TicTacToeScreen(viewModel = viewModel())
+                }
             }
         }
     }
+}
 
-    private fun initArray() {
-        board = arrayOf(
-            arrayOf(binding.button1,binding.button2,binding.button3),
-            arrayOf(binding.button4,binding.button5,binding.button6),
-            arrayOf(binding.button7,binding.button8,binding.button9)
+@Composable
+fun TicTacToeScreen(viewModel: TicTacToeViewModel) {
+    val isDarkTheme = isSystemInDarkTheme()
+    val screenBackgroundColor = if (isDarkTheme) colorResource(id = R.color.board_area_background_dark) else colorResource(id = R.color.board_area_background_light)
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(screenBackgroundColor) // Apply board area background to the whole screen for consistency
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = viewModel.gameMessage,
+            fontSize = 24.sp,
+            color = if (isDarkTheme) Color.White else Color.Black,
+            modifier = Modifier.padding(bottom = 24.dp)
+        )
+
+        BoardView(
+            board = viewModel.board,
+            onCellClick = { row, col -> viewModel.onCellClicked(row, col) },
+            isEnabled = !viewModel.isGameOver,
+            isDarkTheme = isDarkTheme
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(
+            onClick = { viewModel.resetGame() },
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = if (isDarkTheme) colorResource(id = R.color.purple_700) else colorResource(id = R.color.purple_500)
+            )
+        ) {
+            Text(text = "Reset Game", fontSize = 18.sp, color = Color.White)
+        }
+    }
+}
+
+@Composable
+fun BoardView(
+    board: Array<Array<String>>,
+    onCellClick: (Int, Int) -> Unit,
+    isEnabled: Boolean,
+    isDarkTheme: Boolean
+) {
+    val boardBackgroundColor = if (isDarkTheme) colorResource(id = R.color.board_area_background_dark) else colorResource(id = R.color.board_area_background_light)
+    val gridLineColor = if (isDarkTheme) colorResource(id = R.color.grid_line_color_dark) else colorResource(id = R.color.grid_line_color_light)
+
+    Box(modifier = Modifier.background(boardBackgroundColor)) { // Outer box for board background
+        Column(
+            modifier = Modifier
+                .aspectRatio(1f) // Keep board square
+                .padding(4.dp) // Padding for grid lines not to touch edge
+        ) {
+            for (i in board.indices) {
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    for (j in board[i].indices) {
+                        CellView(
+                            text = board[i][j],
+                            onClick = { onCellClick(i, j) },
+                            isEnabled = isEnabled && board[i][j].isEmpty(),
+                            isDarkTheme = isDarkTheme,
+                            modifier = Modifier.weight(1f)
+                        )
+                        if (j < board[i].size - 1) { // Vertical grid line
+                            Spacer(modifier = Modifier
+                                .fillMaxHeight()
+                                .width(1.dp)
+                                .background(gridLineColor))
+                        }
+                    }
+                }
+                if (i < board.size - 1) { // Horizontal grid line
+                    Spacer(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .background(gridLineColor))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun CellView(
+    text: String,
+    onClick: () -> Unit,
+    isEnabled: Boolean,
+    isDarkTheme: Boolean,
+    modifier: Modifier = Modifier
+) {
+    val isClicked = text.isNotEmpty()
+
+    val cellBackgroundColor = when {
+        isClicked && isDarkTheme -> colorResource(id = R.color.cell_clicked_background_dark)
+        isClicked && !isDarkTheme -> colorResource(id = R.color.cell_clicked_background_light)
+        !isClicked && isDarkTheme -> colorResource(id = R.color.cell_unclicked_background_dark)
+        else -> colorResource(id = R.color.cell_unclicked_background_light)
+    }
+
+    val playerXColor = if (isDarkTheme) colorResource(id = R.color.player_x_color_dark) else colorResource(id = R.color.player_x_color_light)
+    val playerOColor = if (isDarkTheme) colorResource(id = R.color.player_o_color_dark) else colorResource(id = R.color.player_o_color_light)
+    val textColor = when (text) {
+        "X" -> playerXColor
+        "O" -> playerOColor
+        else -> if (isDarkTheme) Color.White else Color.Black // Should not be visible if empty
+    }
+
+    Box(
+        modifier = modifier
+            .aspectRatio(1f)
+            .background(cellBackgroundColor)
+            .clip(MaterialTheme.shapes.small) // Optional: adds a slight rounding to cell corners
+            .clickable(enabled = isEnabled, onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = text,
+            fontSize = 48.sp, // Increased size for better visibility
+            fontWeight = FontWeight.Bold,
+            color = textColor
+        )
+    }
+}
+
+@Composable
+fun TicTacToeAppTheme(content: @Composable () -> Unit) {
+    val isDarkTheme = isSystemInDarkTheme()
+    val colorScheme = if (isDarkTheme) {
+        darkColorScheme(
+            primary = colorResource(id = R.color.purple_200),
+            secondary = colorResource(id = R.color.teal_200),
+            // Define other dark theme colors if needed
+            background = colorResource(id = R.color.board_area_background_dark), // Consistent background
+            surface = colorResource(id = R.color.cell_unclicked_background_dark)   // Consistent surface
+        )
+    } else {
+        lightColorScheme(
+            primary = colorResource(id = R.color.purple_500),
+            secondary = colorResource(id = R.color.teal_700),
+            // Define other light theme colors if needed
+            background = colorResource(id = R.color.board_area_background_light),
+            surface = colorResource(id = R.color.cell_unclicked_background_light)
         )
     }
 
-    override fun onClick(v: View) {
-        when(v.id){
-            R.id.button1 -> {
-                updateValue(row = 0,col = 0,player = player)
-            }
-            R.id.button2 -> {
-                updateValue(row = 0,col = 1,player = player)
-            }
-            R.id.button3 -> {
-                updateValue(row = 0,col = 2,player = player)
-            }
-            R.id.button4 -> {
-                updateValue(row = 1,col = 0,player = player)
-            }
-            R.id.button5 -> {
-                updateValue(row = 1,col = 1,player = player)
-            }
-            R.id.button6 -> {
-                updateValue(row = 1,col = 2,player = player)
-            }
-            R.id.button7 -> {
-                updateValue(row = 2,col = 0,player = player)
-            }
-            R.id.button8 -> {
-                updateValue(row = 2,col = 1,player = player)
-            }
-            R.id.button9 -> {
-                updateValue(row = 2,col = 2,player = player)
-            }
-
-        }
-        turnCount++
-        player = !player
-        if (player){
-            updateDisplay(getString(R.string.player_x_turn))
-        }else{
-            updateDisplay(getString(R.string.player_o_turn))
-        }
-        if (turnCount == 9){
-            updateDisplay(getString(R.string.draw_message))
-        }
-        checkWinner()
-    }
-
-    private fun checkWinner() {
-        // Rows
-        for (i in 0..2){
-            if (boardStatus[i][0] == boardStatus[i][1] && boardStatus[i][0] == boardStatus[i][2]){
-                if (boardStatus[i][0] == 1){
-                    updateDisplay(getString(R.string.player_x_won_message))
-                    break
-                }else if(boardStatus[i][0]==0){
-                    updateDisplay(getString(R.string.player_o_won))
-                    break
-                }
-            }
-        }
-
-        // Columns
-        for (i in 0..2){
-            if (boardStatus[0][i] == boardStatus[1][i] && boardStatus[0][i] == boardStatus[2][i]){
-                if (boardStatus[0][i]==1){
-                    updateDisplay(getString(R.string.player_x_won_message))
-                    break
-                }else if(boardStatus[0][i]==0){
-                    updateDisplay(getString(R.string.player_o_won))
-                    break
-                }
-            }
-        }
-
-        //Diagonals
-        if (boardStatus[0][0] == boardStatus[1][1] && boardStatus[0][0] == boardStatus[2][2]){
-            if (boardStatus[0][0]==1){
-                updateDisplay(getString(R.string.player_x_won_message))
-            }else if(boardStatus[0][0]==0){
-                updateDisplay(getString(R.string.player_o_won))
-            }
-        }
-
-        if (boardStatus[0][2] == boardStatus[1][1] && boardStatus[0][2] == boardStatus[2][0]){
-            if (boardStatus[0][2]==1){
-                updateDisplay(getString(R.string.player_x_won_message))
-            }else if(boardStatus[0][2]==0){
-                updateDisplay(getString(R.string.player_o_won))
-            }
-        }
-
-    }
-
-    private fun updateDisplay(gameMessage: String) {
-        binding.displayTv.text = gameMessage
-        if (gameMessage.contains("won")){
-            disableButtons()
-        }
-    }
-
-    private fun disableButtons() {
-        for (i in board){
-            for (j in i){
-                j.isEnabled = false
-            }
-        }
-    }
-
-    private fun updateValue(row: Int, col: Int, player: Boolean) {
-        val text = if (player) "X" else "O"
-        val value = if (player)  1 else  0
-        board[row][col].apply {
-            isEnabled = false
-            setText(text)
-        }
-        boardStatus[row][col] = value
-
-    }
+    MaterialTheme(
+        colorScheme = colorScheme,
+        typography = Typography(), // Define your typography if needed
+        content = content
+    )
 }
